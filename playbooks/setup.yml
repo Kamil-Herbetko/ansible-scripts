@@ -1,0 +1,19 @@
+---
+- name: Setup Ubuntu machine
+  hosts: local
+  become: true
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install basic packages
+      apt:
+        name:
+          - curl
+          - git
+          - htop
+          - "gnome-tweaks"
+          - xclip
+        state: latest
