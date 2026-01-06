@@ -1,19 +1,106 @@
 ---
-- name: Setup Ubuntu machine
-  hosts: local
+- name: Install and Configure Ubuntu
+  hosts: localhost
+  connection: local
   become: true
 
+  vars:
+    real_user: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+    repo_url: "https://github.com/Kamil-Herbetko/miscellaneous"
+    temp_repo_path: "/tmp/miscellaneous_configs"
+    users:
+      - name: root
+        home: /root
+      - name: "{{ real_user }}"
+        home: "/home/{{ real_user }}"
+
   tasks:
+    - name: Print user invoking playbook
+      ansible.builtin.debug:
+        msg: "{{ real_user }}"
+
     - name: Update apt cache
-      apt:
+      ansible.builtin.apt:
         update_cache: yes
 
-    - name: Install basic packages
-      apt:
-        name:
-          - curl
-          - git
-          - htop
-          - "gnome-tweaks"
-          - xclip
+    - name: Install necessary packages
+      ansible.builtin.apt:
+        name: [curl, git, htop, gnome-tweaks, xclip, powerline, powerline-gitstatus, fonts-powerline]
         state: latest
+
+    - name: Install snap specific packages
+      community.general.snap:
+        name: [helix, zellij]
+        classic: yes
+        state: present
+
+    # --- CONFIGURATION LOGIC ---
+
+    - name: Clone configuration repository
+      ansible.builtin.git:
+        repo: "{{ repo_url }}"
+        dest: "{{ temp_repo_path }}"
+        force: yes
+
+    - name: Find directories to copy (excluding bash and .git)
+      ansible.builtin.find:
+        paths: "{{ temp_repo_path }}"
+        file_type: directory
+        excludes: "bash,.git"
+      register: config_dirs
+
+    - name: Ensure .config directories exist for both users
+      ansible.builtin.file:
+        path: "{{ item.home }}/.config"
+        state: directory
+        owner: "{{ 'root' if '/root' in item else real_user }}"
+        mode: '0755'
+      loop: "{{ users }}"
+
+    - name: Copy configs to root and real user
+      ansible.builtin.copy:
+        src: "{{ item.0.path }}"
+        dest: "{{ item.1.home }}/.config/"
+        owner: "{{ item.1.name }}"
+        group: "{{ item.1.name }}"
+        mode: '0755'
+        force: no
+      with_nested:
+        - "{{ config_dirs.files }}"
+        - "{{ users }}"
+
+    - name: Cleanup temporary clone
+      ansible.builtin.file:
+        path: "{{ temp_repo_path }}"
+        state: absent
+
+    - name: Locate powerline-daemon
+      ansible.builtin.command: which powerline-daemon
+      register: powerline_daemon
+      changed_when: false
+
+    - name: Locate powerline bash binding
+      ansible.builtin.find:
+        paths:
+          - /usr/share
+          - /usr/lib
+        patterns: "powerline.sh"
+        recurse: yes
+      register: powerline_shell
+
+    - name: Configure Powerline in bashrc
+      ansible.builtin.blockinfile:
+        path: "{{ item.home }}/.bashrc"
+        marker: "# {mark} ANSIBLE POWERLINE"
+        create: yes
+        block: |
+          # Powerline
+          export PATH="$PATH:{{ powerline_daemon.stdout | dirname }}"
+          powerline-daemon -q
+          POWERLINE_BASH_CONTINUATION=1
+          POWERLINE_BASH_SELECT=1
+          source {{ powerline_shell.files[0].path }}
+        owner: "{{ item.name }}"
+        group: "{{ item.name }}"
+        mode: '0644'
+      loop: "{{ users }}"
