@@ -25,7 +25,19 @@
 
     - name: Install necessary packages
       ansible.builtin.apt:
-        name: [curl, git, htop, gnome-tweaks, xclip, powerline, powerline-gitstatus, fonts-powerline]
+        name:
+        - curl
+        - fonts-powerline
+        - git
+        - gnome-tweaks
+        - gnome-browser-connector
+        - htop
+        - ncdu
+        - ripgrep
+        - timeshift
+        - powerline
+        - powerline-gitstatus
+        - xclip
         state: latest
 
     - name: Install snap specific packages
