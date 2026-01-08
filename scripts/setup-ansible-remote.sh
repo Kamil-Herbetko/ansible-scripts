@@ -8,7 +8,7 @@ SSH_DIR=".ssh"
 AUTHORIZED_KEYS="authorized_keys"
 
 # URL to raw public key file (e.g. GitHub raw link)
-SSH_KEY_URL="https://raw.githubusercontent.com/Kamil-Herbetko/ansible-scripts/main/ansible.pub"
+SSH_KEY_URL="https://raw.githubusercontent.com/Kamil-Herbetko/ansible-scripts/main/ssh_keys/ansible.pub"
 
 echo "===> Preparing remote server for Ansible"
 
