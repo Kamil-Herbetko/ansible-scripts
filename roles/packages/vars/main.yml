@@ -1,0 +1,21 @@
+apt_packages:
+  - bat
+  - curl
+  - fonts-powerline
+  - git
+  - gnome-tweaks
+  - gnome-browser-connector
+  - htop
+  - ncdu
+  - ripgrep
+  - timeshift
+  - powerline
+  - powerline-gitstatus
+  - xclip
+
+snap_packages:
+  - helix
+  - zellij
+
+nix_packages:
+  - eza

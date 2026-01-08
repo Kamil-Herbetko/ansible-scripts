@@ -1,0 +1,9 @@
+- name: Check if Nix is installed
+  stat:
+    path: /nix
+  register: nix_installed
+
+- name: Install Nix (multi-user)
+  shell: |
+    curl -L https://nixos.org/nix/install | sh -s -- --daemon
+  when: not nix_installed.stat.exists

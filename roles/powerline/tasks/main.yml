@@ -1,0 +1,29 @@
+- name: Locate powerline-daemon
+  command: which powerline-daemon
+  register: powerline_daemon
+  changed_when: false
+
+- name: Locate powerline bash binding
+  find:
+    paths:
+      - /usr/share
+      - /usr/lib
+    patterns: powerline.sh
+    recurse: yes
+  register: powerline_shell
+
+- name: Configure Powerline in bashrc
+  blockinfile:
+    path: "{{ item.home }}/.bashrc"
+    marker: "# {mark} ANSIBLE POWERLINE"
+    create: yes
+    block: |
+      export PATH="$PATH:{{ powerline_daemon.stdout | dirname }}"
+      powerline-daemon -q
+      POWERLINE_BASH_CONTINUATION=1
+      POWERLINE_BASH_SELECT=1
+      source {{ powerline_shell.files[0].path }}
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+    mode: '0644'
+  loop: "{{ users }}"

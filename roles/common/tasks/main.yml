@@ -1,0 +1,7 @@
+- name: Print user invoking playbook
+  debug:
+    msg: "{{ real_user }}"
+
+- name: Update apt cache
+  apt:
+    update_cache: yes

@@ -1,0 +1,38 @@
+- name: Clone configuration repository
+  git:
+    repo: "{{ repo_url }}"
+    dest: "{{ temp_repo_path }}"
+    force: yes
+
+- name: Find directories to copy (excluding bash and .git)
+  find:
+    paths: "{{ temp_repo_path }}"
+    file_type: directory
+    excludes: "bash,.git"
+  register: config_dirs
+
+- name: Ensure .config directories exist
+  file:
+    path: "{{ item.home }}/.config"
+    state: directory
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+    mode: '0755'
+  loop: "{{ users }}"
+
+- name: Copy configs to users
+  copy:
+    src: "{{ item.0.path }}"
+    dest: "{{ item.1.home }}/.config/"
+    owner: "{{ item.1.name }}"
+    group: "{{ item.1.name }}"
+    mode: '0755'
+    force: no
+  with_nested:
+    - "{{ config_dirs.files }}"
+    - "{{ users }}"
+
+- name: Cleanup temporary clone
+  file:
+    path: "{{ temp_repo_path }}"
+    state: absent
