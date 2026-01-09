@@ -16,6 +16,3 @@ apt_packages:
 snap_packages:
   - helix
   - zellij
-
-nix_packages:
-  - eza

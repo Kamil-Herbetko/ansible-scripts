@@ -6,6 +6,7 @@
 - name: Locate powerline bash binding
   find:
     paths:
+      - /usr/share/powerline/bindings/bash
       - /usr/share
       - /usr/lib
     patterns: powerline.sh

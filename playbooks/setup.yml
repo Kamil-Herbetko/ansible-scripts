@@ -7,5 +7,6 @@
   roles:
     - roles/common
     - roles/packages
+    - roles/nix-packages
     - roles/configs
     - roles/powerline

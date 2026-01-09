@@ -27,7 +27,7 @@
     owner: "{{ item.1.name }}"
     group: "{{ item.1.name }}"
     mode: '0755'
-    force: no
+    force: yes
   with_nested:
     - "{{ config_dirs.files }}"
     - "{{ users }}"
