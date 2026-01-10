@@ -1,0 +1,17 @@
+users:
+  - name: root
+    home: /root
+  - name: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+    home: "/home/{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+
+nix_users:
+  - name: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+    home: "/home/{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+
+nvm_users:
+  - name: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+    home: "/home/{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+
+gnome_extension_users:
+  - name: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+    home: "/home/{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
