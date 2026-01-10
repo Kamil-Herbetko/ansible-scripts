@@ -1,7 +1,7 @@
 - name: Print user invoking playbook
-  debug:
+  ansible.builtin.debug:
     msg: "{{ real_user }}"
 
 - name: Update apt cache
-  apt:
-    update_cache: yes
+  ansible.builtin.package:
+    update_cache: true

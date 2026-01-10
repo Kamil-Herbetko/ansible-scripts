@@ -1,0 +1,20 @@
+apt_packages:
+  - ansible-lint
+  - bat
+  - curl
+  - fonts-powerline
+  - git
+  - gnome-browser-connector
+  - gnome-tweaks
+  - htop
+  - libarchive-tools
+  - ncdu
+  - powerline
+  - powerline-gitstatus
+  - ripgrep
+  - timeshift
+  - xclip
+
+snap_packages:
+  - helix
+  - zellij

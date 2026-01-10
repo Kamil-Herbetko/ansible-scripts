@@ -1,10 +1,10 @@
 - name: Install apt packages
-  apt:
+  ansible.builtin.package:
     name: "{{ apt_packages }}"
-    state: latest
+    state: present
 
 - name: Install snap packages
   community.general.snap:
     name: "{{ snap_packages }}"
-    classic: yes
+    classic: true
     state: present

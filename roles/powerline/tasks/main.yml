@@ -1,23 +1,23 @@
 - name: Locate powerline-daemon
-  command: which powerline-daemon
+  ansible.builtin.command: which powerline-daemon
   register: powerline_daemon
   changed_when: false
 
 - name: Locate powerline bash binding
-  find:
+  ansible.builtin.find:
     paths:
       - /usr/share/powerline/bindings/bash
       - /usr/share
       - /usr/lib
     patterns: powerline.sh
-    recurse: yes
+    recurse: true
   register: powerline_shell
 
 - name: Configure Powerline in bashrc
-  blockinfile:
+  ansible.builtin.blockinfile:
     path: "{{ item.home }}/.bashrc"
     marker: "# {mark} ANSIBLE POWERLINE"
-    create: yes
+    create: true
     block: |
       export PATH="$PATH:{{ powerline_daemon.stdout | dirname }}"
       powerline-daemon -q

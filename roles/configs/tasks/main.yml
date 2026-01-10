@@ -1,18 +1,19 @@
 - name: Clone configuration repository
-  git:
+  ansible.builtin.git:
     repo: "{{ repo_url }}"
+    version: master
     dest: "{{ temp_repo_path }}"
-    force: yes
+    force: true
 
 - name: Find directories to copy (excluding bash and .git)
-  find:
+  ansible.builtin.find:
     paths: "{{ temp_repo_path }}"
     file_type: directory
     excludes: "bash,.git"
   register: config_dirs
 
 - name: Ensure .config directories exist
-  file:
+  ansible.builtin.file:
     path: "{{ item.home }}/.config"
     state: directory
     owner: "{{ item.name }}"
@@ -21,18 +22,18 @@
   loop: "{{ users }}"
 
 - name: Copy configs to users
-  copy:
+  ansible.builtin.copy:
     src: "{{ item.0.path }}"
     dest: "{{ item.1.home }}/.config/"
     owner: "{{ item.1.name }}"
     group: "{{ item.1.name }}"
     mode: '0755'
-    force: yes
+    force: true
   with_nested:
     - "{{ config_dirs.files }}"
     - "{{ users }}"
 
 - name: Cleanup temporary clone
-  file:
+  ansible.builtin.file:
     path: "{{ temp_repo_path }}"
     state: absent

@@ -1,0 +1,2 @@
+nix_multi_user: true
+nix_users: []

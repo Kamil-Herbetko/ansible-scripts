@@ -1,0 +1,15 @@
+- name: Ensure Nix profile exists
+  ansible.builtin.stat:
+    path: /etc/profile.d/nix.sh
+  register: nix_profile
+
+- name: Install Nix users
+  become: true
+  become_user: "{{ item.name }}"
+  ansible.builtin.shell: |
+    . /etc/profile.d/nix.sh
+    nix-env -iA {{ nix_packages | map('regex_replace', '^', 'nixpkgs.') | join(' ') }}
+  register: output
+  changed_when: output.rc != 0
+  when: nix_profile.stat.exists
+  loop: "{{ nix_users }}"

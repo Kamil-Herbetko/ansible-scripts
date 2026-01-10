@@ -1,9 +1,21 @@
 - name: Check if Nix is installed
-  stat:
+  ansible.builtin.stat:
     path: /nix
   register: nix_installed
 
 - name: Install Nix (multi-user)
-  shell: |
-    curl -L https://nixos.org/nix/install | sh -s -- --daemon
-  when: not nix_installed.stat.exists
+  ansible.builtin.shell: |
+    set -o pipefail
+    curl -L {{ nix_installer_url }} | sh -s -- --daemon
+  changed_when: true
+  when: not nix_installed.stat.exists and nix_multi_user
+
+- name: Install Nix (chosen users)
+  become: true
+  become_user: "{{ item.name }}"
+  ansible.builtin.shell: |
+    set -o pipefail
+    curl -L {{ nix_installer_url }} | sh -s -- --no-daemon
+  when: not nix_installed.stat.exists and not nix_multi_user
+  changed_when: true
+  loop: "{{ nix_users }}"
