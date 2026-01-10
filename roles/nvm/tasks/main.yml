@@ -1,0 +1,55 @@
+---
+- name: Fail if no users defined
+  ansible.builtin.fail:
+    msg: "nvm_users must be defined"
+  when: nvm_users | length == 0
+
+- name: Install NVM for users
+  become: true
+  become_user: "{{ item.name }}"
+  ansible.builtin.shell: |
+    set -o pipefail
+    if [ ! -d "$HOME/.nvm" ]; then
+      curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_version }}/install.sh | bash
+    fi
+  args:
+    executable: /bin/bash
+  changed_when: true
+  environment:
+    PROFILE: "{{ item.home }}/.bashrc"
+  loop: "{{ nvm_users }}"
+
+- name: Ensure nvm is loaded in bashrc
+  ansible.builtin.blockinfile:
+    path: "{{ item.home }}/.bashrc"
+    marker: "# {mark} ANSIBLE NVM"
+    block: |
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+      [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+    mode: '0644'
+  loop: "{{ nvm_users }}"
+
+- name: Install Node versions via nvm
+  become: true
+  become_user: "{{ item.0.name }}"
+  ansible.builtin.shell: |
+    source "$HOME/.nvm/nvm.sh"
+    nvm install {{ item.1 }}
+  args:
+    executable: /bin/bash
+  changed_when: true
+  loop: "{{ nvm_users | product(nvm_node_versions) | list }}"
+
+- name: Set default Node version
+  become: true
+  become_user: "{{ item.name }}"
+  ansible.builtin.shell: |
+    source "$HOME/.nvm/nvm.sh"
+    nvm alias default {{ nvm_default_node }}
+  args:
+    executable: /bin/bash
+  changed_when: false
+  loop: "{{ nvm_users }}"

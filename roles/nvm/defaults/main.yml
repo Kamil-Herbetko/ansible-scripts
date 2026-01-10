@@ -1,0 +1,12 @@
+---
+nvm_version: "v0.39.7"
+
+# Node versions to install (per user)
+nvm_node_versions:
+  - "lts/*"
+
+# Default node version
+nvm_default_node: "lts/*"
+
+# Users to install nvm for
+nvm_users: []
