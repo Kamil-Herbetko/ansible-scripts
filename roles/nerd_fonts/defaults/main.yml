@@ -1,0 +1,10 @@
+---
+nerd_fonts_version: "v3.4.0"
+
+# Fonts to install (folder name = font name)
+nerd_fonts:
+  - SourceCodePro
+  - ProFont
+  - SpaceMono
+
+nerd_fonts_install_dir: /usr/local/share/fonts/NerdFonts
