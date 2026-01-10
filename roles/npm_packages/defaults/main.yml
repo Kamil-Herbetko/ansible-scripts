@@ -1,0 +1,9 @@
+---
+# Users for npm global installs (the same group as for nvm)
+nvm_users: []
+
+# Global npm packages to install
+npm_global_packages:
+  - "@ansible/ansible-language-server"
+  - "yaml-language-server@next"
+  - "@imoverlord/yamlfmt"

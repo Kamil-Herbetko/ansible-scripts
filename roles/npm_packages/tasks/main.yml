@@ -1,0 +1,24 @@
+---
+- name: Verify npm is available
+  ansible.builtin.shell: |
+    export NVM_DIR="{{ item.home }}/.nvm"
+    . "$NVM_DIR/nvm.sh"
+    command -v npm
+  args:
+    executable: /bin/bash
+  changed_when: false
+  loop: "{{ nvm_users }}"
+
+- name: Install global npm packages using nvm
+  become: true
+  become_user: "{{ item.0.name }}"
+  ansible.builtin.shell: |
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+    nvm use default >/dev/null
+    npm install -g {{ item.1 }}
+  args:
+    executable: /bin/bash
+  changed_when: true
+  loop: "{{ nvm_users | product(npm_global_packages) | list }}"
