@@ -5,8 +5,12 @@
   become: true
 
   roles:
-    - roles/common
-    - roles/packages
-    - roles/nix-packages
-    - roles/configs
-    - roles/powerline
+    - common
+    - nerd_fonts
+    - packages
+    - gnome_extensions
+    - nix_packages
+    - nvm
+    - npm_packages
+    - configs
+    - powerline

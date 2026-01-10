@@ -1,0 +1,15 @@
+---
+# Users to install extensions for
+gnome_extension_users: []
+
+# Extensions by UUID
+gnome_extensions:
+  - uuid: blur-my-shell@aunetx
+  - uuid: caffeine@patapon.info
+  - uuid: forge@jmmaranan.com
+  - uuid: Vitals@CoreCoding.com
+  - uuid: extension-list@tu.berry
+  - uuid: gnome-clipboard@b00f.github.io
+
+# Enable extensions after install
+gnome_extensions_enable: false

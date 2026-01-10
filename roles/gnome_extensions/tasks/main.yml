@@ -1,0 +1,66 @@
+---
+- name: Detect GNOME Shell version
+  ansible.builtin.command: gnome-shell --version
+  register: gnome_version_raw
+  changed_when: false
+  failed_when: false
+
+- name: Abort if GNOME not detected
+  ansible.builtin.meta: end_host
+  when: gnome_version_raw.rc != 0
+
+- name: Extract GNOME major version
+  ansible.builtin.set_fact:
+    gnome_shell_version: "{{ gnome_version_raw.stdout | regex_search('[0-9]+') }}"
+
+- name: Fail if no users defined
+  ansible.builtin.fail:
+    msg: "gnome_extension_users must be defined"
+  when: gnome_extension_users | length == 0
+
+- name: Install GNOME extensions
+  become: true
+  become_user: "{{ item.0.name }}"
+  ansible.builtin.shell: |
+    set -o pipefail
+
+    UUID="{{ item.1.uuid }}"
+
+    EXT_DIR="$HOME/.local/share/gnome-shell/extensions/$UUID"
+    mkdir -p "$EXT_DIR"
+
+    INFO_JSON=$(curl -fsSL \
+          "https://extensions.gnome.org/extension-info/?uuid=${UUID}&shell_version={{ gnome_shell_version }}")
+
+    DOWNLOAD_URL=$(echo "$INFO_JSON" | jq -r '.download_url')
+
+    if [ "$DOWNLOAD_URL" = "null" ]; then
+      echo "No compatible version for $UUID"
+      exit 0
+    fi
+
+
+    if [ ! -f "$EXT_DIR/metadata.json" ]; then
+      curl -fsSL "https://extensions.gnome.org${DOWNLOAD_URL}" \
+        | bsdtar -xf - -C "$EXT_DIR"
+    fi
+  args:
+    executable: /bin/bash
+  register: output
+  changed_when: output.rc != 0
+  loop: "{{ gnome_extension_users | product(gnome_extensions) | list }}"
+
+- name: Enable GNOME extensions if session is available
+  become: true
+  become_user: "{{ item.0.name }}"
+  ansible.builtin.shell: |
+    UUID="{{ item.1.uuid }}"
+
+    if gnome-extensions list >/dev/null 2>&1; then
+      gnome-extensions enable "$UUID" || true
+    fi
+  args:
+    executable: /bin/bash
+  when: gnome_extensions_enable
+  changed_when: true
+  loop: "{{ gnome_extension_users | product(gnome_extensions) | list }}"
