@@ -9,7 +9,4 @@ gnome_extensions:
   - uuid: forge@jmmaranan.com
   - uuid: Vitals@CoreCoding.com
   - uuid: extension-list@tu.berry
-  - uuid: gnome-clipboard@b00f.github.io
-
-# Enable extensions after install
-gnome_extensions_enable: false
+  - uuid: clipboard-indicator@tudmotu.com

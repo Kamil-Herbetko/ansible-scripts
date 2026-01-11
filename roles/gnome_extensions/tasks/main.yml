@@ -43,24 +43,11 @@
     if [ ! -f "$EXT_DIR/metadata.json" ]; then
       curl -fsSL "https://extensions.gnome.org${DOWNLOAD_URL}" \
         | bsdtar -xf - -C "$EXT_DIR"
+      glib-compile-schemas "${EXT_DIR}/schemas"
+
     fi
   args:
     executable: /bin/bash
   register: output
   changed_when: output.rc != 0
-  loop: "{{ gnome_extension_users | product(gnome_extensions) | list }}"
-
-- name: Enable GNOME extensions if session is available
-  become: true
-  become_user: "{{ item.0.name }}"
-  ansible.builtin.shell: |
-    UUID="{{ item.1.uuid }}"
-
-    if gnome-extensions list >/dev/null 2>&1; then
-      gnome-extensions enable "$UUID" || true
-    fi
-  args:
-    executable: /bin/bash
-  when: gnome_extensions_enable
-  changed_when: true
   loop: "{{ gnome_extension_users | product(gnome_extensions) | list }}"
