@@ -5,5 +5,6 @@ nix_packages:
   - scooter
   - ueberzugpp
   - yazi
+  - zoxide
 
 nix_users: []
