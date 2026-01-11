@@ -3,7 +3,7 @@
     path: /etc/profile.d/nix.sh
   register: nix_profile
 
-- name: Install Nix users
+- name: Install Nix packages for users
   become: true
   become_user: "{{ item.name }}"
   ansible.builtin.shell: |

@@ -1,5 +1,9 @@
 nix_packages:
   - eza
   - bat
+  - lazygit
+  - scooter
+  - ueberzugpp
+  - yazi
 
 nix_users: []

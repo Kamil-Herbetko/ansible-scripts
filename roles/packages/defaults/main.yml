@@ -6,6 +6,7 @@ apt_packages:
   - git
   - gnome-browser-connector
   - gnome-tweaks
+  - gron
   - htop
   - libarchive-tools
   - ncdu
