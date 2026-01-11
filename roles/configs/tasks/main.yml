@@ -1,7 +1,7 @@
 - name: Clone configuration repository
   ansible.builtin.git:
     repo: "{{ repo_url }}"
-    version: master
+    version: main
     dest: "{{ temp_repo_path }}"
     force: true
 
@@ -11,6 +11,24 @@
     file_type: directory
     excludes: "bash,.git"
   register: config_dirs
+
+- name: Find bash files to copy
+  ansible.builtin.find:
+    paths: "{{ temp_repo_path }}/bash"
+    hidden: true
+  register: bash_files
+
+- name: Copy bash files to home
+  ansible.builtin.copy:
+    src: "{{ item.1.path }}"
+    dest: "{{ item.0.home }}"
+    owner: "{{ item.0.name }}"
+    group: "{{ item.0.name }}"
+    mode: '0755'
+    force: true
+  with_nested:
+    - "{{ users }}"
+    - "{{ bash_files.files }}"
 
 - name: Ensure .config directories exist
   ansible.builtin.file:
