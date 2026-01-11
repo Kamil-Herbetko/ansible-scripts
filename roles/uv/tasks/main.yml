@@ -1,0 +1,18 @@
+- name: Fail if no uv users defined
+  ansible.builtin.fail:
+    msg: "uv_users must be defined"
+  when: uv_users | length == 0
+
+- name: Install uv for users
+  become: true
+  become_user: "{{ item.name }}"
+  ansible.builtin.shell: |
+    set -o pipefail
+    if [ ! -x "$HOME/.local/bin/uv" ]; then
+      curl -LsSf {{ uv_install_url }} | sh
+    fi
+  args:
+    executable: /bin/bash
+  register: output
+  changed_when: output.rc == 0
+  loop: "{{ uv_users }}"
