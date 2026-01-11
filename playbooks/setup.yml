@@ -14,3 +14,5 @@
     - npm_packages
     - configs
     - powerline
+    - uv
+    - xonsh
