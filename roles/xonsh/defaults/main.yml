@@ -1,0 +1,14 @@
+---
+xonsh_users: []
+
+# Automatically make xonsh default shell
+xonsh_make_default: true
+
+# Install extras (recommended)
+xonsh_extras:
+  - full
+
+xontrib_packages:
+  - xontrib-powerline2
+  - xontrib-bashisms
+  - packaging

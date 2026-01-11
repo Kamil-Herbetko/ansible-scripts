@@ -1,0 +1,46 @@
+- name: Fail if no xonsh users defined
+  ansible.builtin.fail:
+    msg: "xonsh_users must be defined"
+  when: xonsh_users | length == 0
+
+- name: Install xonsh using uv
+  become: true
+  become_user: "{{ item.name }}"
+  ansible.builtin.shell: |
+    set -o pipefail
+    ~/.local/bin/uv tool install xonsh{{ '[' + xonsh_extras | join(',') + ']' if xonsh_extras | length > 0 else '' }} -w {{ xontrib_packages | join(' -w ') }}
+  args:
+    executable: /bin/bash
+  register: xonsh_install_result
+  changed_when: '"+" in xonsh_install_result.stderr'
+  loop: "{{ xonsh_users }}"
+
+- name: Ensure xonsh is in /etc/shells
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/shells
+    line: "{{ item.home }}/.local/bin/xonsh"
+    state: present
+  loop: "{{ xonsh_users }}"
+  when: xonsh_make_default
+
+- name: Set xonsh as default shell
+  become: true
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    shell: "{{ item.home }}/.local/bin/xonsh"
+  loop: "{{ xonsh_users }}"
+  when: xonsh_make_default
+
+- name: Configure powerline in xonsh
+  ansible.builtin.blockinfile:
+    path: "{{ item.home }}/.xonshrc"
+    marker: "# {mark} ANSIBLE POWERLINE"
+    create: true
+    block: |
+      xontrib load powerline2
+      xontrib load bashisms
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+    mode: '0644'
+  loop: "{{ xonsh_users }}"
