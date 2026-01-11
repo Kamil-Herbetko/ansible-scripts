@@ -6,6 +6,7 @@ gnome_extension_users: []
 gnome_extensions:
   - uuid: blur-my-shell@aunetx
   - uuid: caffeine@patapon.info
+  # This extension isn't maintained actively anymore, but works fine (01.2026). You may need to find a different one in the future
   - uuid: forge@jmmaranan.com
   - uuid: Vitals@CoreCoding.com
   - uuid: extension-list@tu.berry
