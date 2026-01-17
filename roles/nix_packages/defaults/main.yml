@@ -1,6 +1,7 @@
 nix_packages:
   - eza
   - bat
+  - fzf
   - lazygit
   - scooter
   - ueberzugpp
