@@ -1,10 +1,21 @@
 - name: Install apt packages
   ansible.builtin.package:
-    name: "{{ apt_packages }}"
+    name: "{{ system_packages }}"
     state: present
+
+- name: Check if snap binary exists
+  ansible.builtin.command: which snap
+  register: snap_check
+  changed_when: false
+  failed_when: false
+
+- name: Set snap presence fact
+  ansible.builtin.set_fact:
+    snap_present: "{{ snap_check.rc == 0 }}"
 
 - name: Install snap packages
   community.general.snap:
     name: "{{ snap_packages }}"
     classic: true
     state: present
+  when: snap_present
