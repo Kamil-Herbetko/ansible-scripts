@@ -5,14 +5,15 @@
   become: true
 
   roles:
-    - common
-    - nerd_fonts
-    - packages
-    - gnome_extensions
-    - nix_packages
-    - nvm
-    - npm_packages
-    - configs
-    - powerline
-    - uv
-    - xonsh
+    # - common
+    # - nerd_fonts
+    # - packages
+    # - gnome_extensions
+    # - nix_packages
+    # - nvm
+    # - npm_packages
+    # - configs
+    # - powerline
+    # - uv
+    # - xonsh
+    - docker

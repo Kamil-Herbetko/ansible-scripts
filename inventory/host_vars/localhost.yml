@@ -23,3 +23,6 @@ uv_users:
 xonsh_users:
   - name: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
     home: "/home/{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+
+docker_users:
+  - "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
