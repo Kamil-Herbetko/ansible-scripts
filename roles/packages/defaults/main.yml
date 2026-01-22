@@ -17,6 +17,4 @@ system_packages:
   - timeshift
   - xclip
 
-snap_packages:
-  - helix
-  - zellij
+snap_packages: []

@@ -2,10 +2,12 @@ nix_packages:
   - eza
   - bat
   - fzf
+  - helix
   - lazygit
   - scooter
   - ueberzugpp
   - yazi
+  - zellij
   - zoxide
 
 nix_users: []
