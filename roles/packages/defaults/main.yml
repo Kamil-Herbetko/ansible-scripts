@@ -16,5 +16,3 @@ system_packages:
   - ripgrep
   - timeshift
   - xclip
-
-snap_packages: []
