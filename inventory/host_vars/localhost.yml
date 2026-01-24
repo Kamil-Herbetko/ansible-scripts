@@ -26,3 +26,17 @@ xonsh_users:
 
 docker_users:
   - "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+
+git_users:
+  - name: kamil
+    home: /home/kamil
+
+git_user_name: "Kamil Herbetko"
+git_user_email: "kamil@example.com"
+
+git_core_editor: "hx"
+
+git_extra_config:
+  pull.rebase: "false"
+  push.autoSetupRemote: "true"
+  fetch.prune: "true"

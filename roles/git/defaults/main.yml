@@ -1,0 +1,16 @@
+git_users: []
+
+git_user_name: ""
+git_user_email: ""
+
+git_core_editor: "hx"
+git_default_branch: "main"
+
+git_aliases:
+  st: status
+  co: checkout
+  br: branch
+  ci: commit
+  lg: "log --oneline --graph --decorate"
+
+git_extra_config: {}

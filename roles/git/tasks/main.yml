@@ -1,0 +1,66 @@
+- name: Install git
+  ansible.builtin.apt:
+    name: git
+    state: present
+    update_cache: true
+
+- name: Fail if no git users defined
+  ansible.builtin.fail:
+    msg: "git_users must be defined"
+  when: git_users | length == 0
+
+- name: Set git user.name
+  become: true
+  become_user: "{{ item.name }}"
+  community.general.git_config:
+    name: user.name
+    value: "{{ git_user_name }}"
+    scope: global
+  when: git_user_name | length > 0
+  loop: "{{ git_users }}"
+
+- name: Set git user.email
+  become: true
+  become_user: "{{ item.name }}"
+  community.general.git_config:
+    name: user.email
+    value: "{{ git_user_email }}"
+    scope: global
+  when: git_user_email | length > 0
+  loop: "{{ git_users }}"
+
+- name: Set core editor
+  become: true
+  become_user: "{{ item.name }}"
+  community.general.git_config:
+    name: core.editor
+    value: "{{ git_core_editor }}"
+    scope: global
+  loop: "{{ git_users }}"
+
+- name: Set default branch name
+  become: true
+  become_user: "{{ item.name }}"
+  community.general.git_config:
+    name: init.defaultBranch
+    value: "{{ git_default_branch }}"
+    scope: global
+  loop: "{{ git_users }}"
+
+- name: Configure git aliases
+  become: true
+  become_user: "{{ item.0.name }}"
+  community.general.git_config:
+    name: "alias.{{ item.1.key }}"
+    value: "{{ item.1.value }}"
+    scope: global
+  loop: "{{ git_users | product(git_aliases | dict2items) | list }}"
+
+- name: Apply extra git config
+  become: true
+  become_user: "{{ item.0.name }}"
+  community.general.git_config:
+    name: "{{ item.1.key }}"
+    value: "{{ item.1.value }}"
+    scope: global
+  loop: "{{ git_users | product(git_extra_config | dict2items) | list }}"
