@@ -12,5 +12,6 @@ git_aliases:
   br: branch
   ci: commit
   lg: "log --oneline --graph --decorate"
+  pr: "!f() { git fetch upstream pull/$1/head:pr-$1 && git checkout pr-$1; }; f"
 
 git_extra_config: {}
