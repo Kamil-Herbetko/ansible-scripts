@@ -9,6 +9,7 @@ git_default_branch: "main"
 git_aliases:
   st: status
   co: checkout
+  pu: pull
   br: branch
   ci: commit
   lg: "log --oneline --graph --decorate"
