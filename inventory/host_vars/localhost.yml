@@ -32,7 +32,7 @@ git_users:
     home: /home/kamil
 
 git_user_name: "Kamil Herbetko"
-git_user_email: "kamil@example.com"
+git_user_email: "herbetko.kamil@gmail.com"
 
 git_core_editor: "hx"
 
