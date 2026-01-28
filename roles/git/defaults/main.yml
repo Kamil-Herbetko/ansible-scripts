@@ -9,10 +9,16 @@ git_default_branch: "main"
 git_aliases:
   st: status
   co: checkout
-  pu: pull
+  pl: pull
+  pu: push
   br: branch
   ci: commit
   lg: "log --oneline --graph --decorate"
+  lga: "log --oneline --graph --decorate --all --color"
   pr: "!f() { git fetch upstream pull/$1/head:pr-$1 && git checkout pr-$1; }; f"
+  stb: "status -sb"
+  unstage: "reset HEAD --"
+  coa: "commit --amend"
+  authors: "shortlog -sne"
 
 git_extra_config: {}
