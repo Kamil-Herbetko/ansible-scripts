@@ -135,8 +135,25 @@ Installs Nerd Fonts and Powerline-compatible fonts.
 Installs GNOME Shell extensions in a headless-safe way.
 
 ### 🔹 ssh_hardening
-Optional role for securing SSH.
+The `ssh_hardening` role secures OpenSSH using safe, modern defaults while avoiding accidental lockouts.
 
+### Features
+- Disables root login
+- Disables password authentication
+- Enforces key-based access
+- Limits brute-force attempts
+- Optional user/group allowlists
+- Validates configuration before service restart
+
+### Example configuration
+
+    ssh_allow_users:
+      - kamil
+
+    ssh_password_authentication: "no"
+    ssh_permit_root_login: "no"
+
+> ⚠️ Always test SSH changes in an existing session before closing it.
 ---
 
 ## 🧠 Variables & Configuration

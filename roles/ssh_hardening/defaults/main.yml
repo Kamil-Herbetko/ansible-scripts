@@ -1,0 +1,23 @@
+ssh_port: 22
+
+ssh_permit_root_login: "no"
+ssh_password_authentication: "no"
+ssh_challenge_response_authentication: "no"
+ssh_use_pam: "yes"
+
+ssh_pubkey_authentication: "yes"
+
+ssh_x11_forwarding: "no"
+ssh_tcp_forwarding: "no"
+ssh_agent_forwarding: "no"
+
+ssh_allow_users: []
+ssh_allow_groups: []
+
+ssh_max_auth_tries: 3
+ssh_login_grace_time: 30
+ssh_client_alive_interval: 300
+ssh_client_alive_count_max: 2
+
+ssh_print_motd: "no"
+ssh_print_lastlog: "yes"
