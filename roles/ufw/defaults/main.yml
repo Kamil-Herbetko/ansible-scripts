@@ -1,0 +1,13 @@
+ufw_enabled: true
+ufw_logging: "low"
+
+ufw_default_incoming_policy: deny
+ufw_default_outgoing_policy: allow
+
+ufw_allow_ssh: true
+ufw_ssh_port: 22
+
+ufw_allowed_tcp_ports: []
+ufw_allowed_udp_ports: []
+
+ufw_allowed_services: []

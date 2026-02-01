@@ -137,7 +137,7 @@ Installs GNOME Shell extensions in a headless-safe way.
 ### 🔹 ssh_hardening
 The `ssh_hardening` role secures OpenSSH using safe, modern defaults while avoiding accidental lockouts.
 
-### Features
+#### Features
 - Disables root login
 - Disables password authentication
 - Enforces key-based access
@@ -145,7 +145,7 @@ The `ssh_hardening` role secures OpenSSH using safe, modern defaults while avoid
 - Optional user/group allowlists
 - Validates configuration before service restart
 
-### Example configuration
+#### Example configuration
 
     ssh_allow_users:
       - kamil
@@ -155,6 +155,32 @@ The `ssh_hardening` role secures OpenSSH using safe, modern defaults while avoid
 
 > ⚠️ Always test SSH changes in an existing session before closing it.
 ---
+
+### 🔥 UFW Firewall
+
+The `ufw` role configures a simple and safe firewall using Uncomplicated Firewall (UFW).
+
+#### Features
+- Default deny incoming traffic
+- Default allow outgoing traffic
+- SSH access allowed by default
+- Support for TCP/UDP ports and named services
+- Safe ordering to avoid lockout
+
+#### Example configuration
+
+    ufw_allow_ssh: true
+    ufw_ssh_port: 22
+
+    ufw_allowed_tcp_ports:
+      - 80
+      - 443
+
+    ufw_allowed_services:
+      - OpenSSH
+
+> ⚠️ Always allow SSH before enabling the firewall on remote systems.
+
 
 ## 🧠 Variables & Configuration
 

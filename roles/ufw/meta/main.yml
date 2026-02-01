@@ -1,0 +1,6 @@
+galaxy_info:
+  role_name: ufw
+  author: Kamil Herbetko
+  description: Simple and safe UFW firewall configuration
+  license: MIT
+  min_ansible_version: "2.14"

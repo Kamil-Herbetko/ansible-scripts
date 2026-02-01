@@ -40,3 +40,14 @@ git_extra_config:
   pull.rebase: "false"
   push.autoSetupRemote: "true"
   fetch.prune: "true"
+
+ufw_allow_ssh: true
+ufw_ssh_port: 22
+
+ufw_allowed_tcp_ports:
+  - 80
+  - 443
+  - 3000
+
+ufw_allowed_services:
+  - OpenSSH
