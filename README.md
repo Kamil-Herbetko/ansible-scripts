@@ -43,6 +43,8 @@ The focus is on **reproducibility, clarity, and modern tooling**, while avoiding
     │   ├── ssh_hardening/
     │   ├── uv/
     │   ├── xonsh/
+    │   ├── ssh_hardening/
+    │   ├── ufw/
     │   └── …
     ├── scripts/
     │   ├── setup-ansible-local.sh
